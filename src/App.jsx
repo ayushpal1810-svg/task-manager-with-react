@@ -46,7 +46,15 @@ const completedTasks = task.filter((t) => t.completed);
   inputRef.current.focus();
 };
 const saveTask = () => {
+       if (!title.trim()) {
+
+    cancelEdit();
+
+    return;
+
+  }
   settask(
+
     task.map((t) =>
       t.id === editId
         ? { ...t, title: title }
@@ -54,8 +62,10 @@ const saveTask = () => {
     )
   );
 
+console.log(title)
   settitle("");
   setEditId(null);
+  
 };
 const cancelEdit = () => {
   setEditId(null);
@@ -85,8 +95,8 @@ const cancelEdit = () => {
 )}
     <h3>Pending task</h3>
    { pendingTasks.map ((t)=>(
-    <div>
-    <span key={t.id} onClick={()=>completedtask(t.id) } className={t.completed ? "done" : ""}>{t.title} 
+    <div key={t.id} className={editId === t.id ? "editing" : ""}>
+    <span onClick={()=>completedtask(t.id) } className={t.completed ? "done" : ""}>{t.title} 
     
      </span>
      <button onClick={()=>deletetask(t.id)}>Delete</button>
