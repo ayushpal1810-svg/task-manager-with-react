@@ -1,3 +1,10 @@
+.done{
+  text-decoration: line-through;
+  background-color: green;
+  color: black;
+}
+
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
