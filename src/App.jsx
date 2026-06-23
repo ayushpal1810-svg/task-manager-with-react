@@ -26,25 +26,39 @@ useEffect(() => {
 const [customDate, setCustomDate] = useState("");
   const pendingTasks = task.filter((t) => !t.completed);
   const completedTasks = task.filter((t) => t.completed);
-  const addtask = () => {
+  const addtask = async () => {
+  if (!title.trim()) return;
 
-    if (!title.trim()) return;
-    const newtask = {
-      id: Date.now(),
-      title: title,
-      completed: false,
-      category: category === "" ? "no category" : category,
-      dueDate: dueDate
-    };
-    
-    
-    console.log(newtask)
-    settask([...task, newtask]);
-    setcategory("")
-    settitle("")
-    setDueDate("")
-    
+  const newTask = {
+    title,
+    category: category === "" ? "no category" : category,
+    dueDate,
   };
+
+  try {
+    const res = await fetch("http://localhost:5001/api/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTask),
+    });
+
+    const data = await res.json();
+
+    console.log("Saved from backend:", data);
+
+    // update UI with backend response
+    settask([...task, data]);
+
+    // clear inputs
+    settitle("");
+    setcategory("");
+    setDueDate("");
+  } catch (error) {
+    console.log("Error:", error);
+  }
+};
   const completedtask = (id) => {
     settask(
       task.map((t) =>
